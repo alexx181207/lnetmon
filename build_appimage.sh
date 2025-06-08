@@ -4,7 +4,7 @@ set -e
 # Crear entorno de construcción
 APP="LNetMon"
 VERSION="0.1.1"
-APPDIR="$APP.AppDir"
+APPDIR="/home/alejandro/Softwares/Proyecto/LNetMon/$APP.AppDir"
 mkdir -p "$APPDIR/usr/bin"
 mkdir -p "$APPDIR/lib"
 mkdir -p "$APPDIR/usr/lib"
@@ -64,4 +64,4 @@ python3 -m pip install --target="$APPDIR/usr/lib/python3.11/site-packages" reque
 #chmod +x build/appimagetool
 
 # Construir AppImage
-./appimagetool "$APPDIR" "$APP-$VERSION.AppImage"
+  /home/alejandro/Softwares/Proyecto/LNetMon/appimagetool "$APPDIR" "$APP-$VERSION.AppImage"
