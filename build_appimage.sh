@@ -5,7 +5,8 @@ set -e
 APP="LNetMon"
 VERSION="0.1.1"
 DIR="/home/alejandro/Softwares/Proyecto/LNetMon"
-APPDIR="$DIR/$APP.AppDir"
+mkdir -p "$DIR/build"
+APPDIR="$DIR/build/$APP.AppDir"
 mkdir -p "$APPDIR/usr/bin"
 mkdir -p "$APPDIR/lib"
 mkdir -p "$APPDIR/usr/lib"
@@ -47,7 +48,7 @@ exec "\$HERE/usr/bin/lnetmon.py"
 EOF
 chmod +x "$APPDIR/AppRun"
 
-# Crear .desktop
+# Crear .desktop"$DIR"
 cat > "$APPDIR/$APP.desktop" <<EOF
 [Desktop Entry]
 Name=LNetMon
@@ -65,4 +66,4 @@ python3 -m pip install --target="$APPDIR/usr/lib/python3.11/site-packages" reque
 #chmod +x build/appimagetool
 
 # Construir AppImage
-  /home/alejandro/Softwares/Proyecto/LNetMon/appimagetool "$APPDIR" "$APP-$VERSION.AppImage"
+  $DIR/appimagetool "$APPDIR" "$APP-$VERSION.AppImage"
