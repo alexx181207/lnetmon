@@ -1842,6 +1842,9 @@ class InternetMonitor:
             
         # Actualizar menú de sistema tray
         self.update_data_usage_menu()
+        
+        #Actualizar los consumos por aplicación
+        self.update_app_usage_page()
     
         # Historial reciente
         self.history_list.clear()
@@ -1860,8 +1863,8 @@ class InternetMonitor:
          """
         
         # Actualizar historial en GUI si está abierto
-        """if hasattr(self, "data_history_window"):
-            self.update_data_history_page()"""
+        if hasattr(self, "data_history_window"):
+            self.update_data_history_page()
               
         return True
 
