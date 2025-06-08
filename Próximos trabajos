@@ -1,0 +1,7 @@
+Trabajos a realizar para la aplicación:
+
+1- Empaquetar la aplicación en .deb para Debian y derivadas
+2- Empaquetar la aplicación en .rpm para Rhel y derivadas
+3- Crear la posibilidad de conocer las aplicaciones o servicios del Sistema que consumen los Datos y cuanto está consumiendo cada uno. Se realizó, pero hay que cuadrar bien que sean reales los Datos que se están compartiendo
+4- Hacer un buen trabajo sobre el modo oscuro
+
