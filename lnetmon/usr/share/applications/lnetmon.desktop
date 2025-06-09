@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=LNetMon
+Exec=lnetmon
+Icon=/usr/share/lnetmon/net-icon.png
+Type=Application
+Categories=Utility,Internet;
