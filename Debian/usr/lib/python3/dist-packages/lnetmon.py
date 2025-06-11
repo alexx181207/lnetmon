@@ -3125,7 +3125,7 @@ Public License instead of this License.  But first, please read
                 response = dialog.run()
                 if response == Gtk.ResponseType.OK:
                     # Abrir repositorio en navegador
-                    Gtk.show_uri_on_window(None, "https://github.com/alexx181207/lnetmon",  Gdk.CURRENT_TIME)
+                    Gtk.show_uri_on_window(None, "https://github.com/alexx181207/lnetmon/releases/download/",  Gdk.CURRENT_TIME)
                 dialog.destroy()
             else:
                 dialog = Gtk.MessageDialog(
