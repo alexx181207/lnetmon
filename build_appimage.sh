@@ -4,7 +4,7 @@ set -e
 # Crear entorno de construcción
 APP="LNetMon"
 VERSION="0.1.1"
-DIR="/home/alejandro/Softwares/Proyecto/LNetMon"
+DIR="~/Softwares/Proyecto/LNetMon"
 mkdir -p "$DIR/build"
 APPDIR="$DIR/build/$APP.AppDir"
 mkdir -p "$APPDIR/usr/bin"
@@ -41,7 +41,7 @@ export LD_LIBRARY_PATH="$HERE/lib:${LD_LIBRARY_PATH}"
 export GI_TYPELIB_PATH="$HERE/usr/lib/girepository-1.0"
 export GI_TYPELIB_PATH="$HERE/lib/girepository-1.0"
 export XDG_DATA_DIRS="$HERE/usr/share:${XDG_DATA_DIRS}"
-export PYTHONPATH="\$HERE/usr/lib/python3.11/site-packages:\$PYTHONPATH"
+export PYTHONPATH="\$HERE/usr/lib/python3.13/site-packages:\$PYTHONPATH"
 
 # Ejecutar la aplicación Python
 exec "\$HERE/usr/bin/lnetmon.py"

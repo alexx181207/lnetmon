@@ -1,8 +1,0 @@
-Package: lnetmon
-Version: 0.1.1
-Section: internet, utility
-Priority: optional
-Architecture: amd64
-Depends: python3, python3-requests, python3-pillow, python3-gi, python3-gi-cairo, python3-psutil, speedtest-cli, python3-pystray, libayatana-appindicator3-1
-Maintainer: Alejandro Miguel Blanco Arias <alexxge181207@gmail.com>
-Description: Monitor de Internet
