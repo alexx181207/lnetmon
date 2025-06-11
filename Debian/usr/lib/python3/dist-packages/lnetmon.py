@@ -2201,8 +2201,8 @@ class InternetMonitor:
 
         return usage
 
-    def monitor_app_data(self):
-        """Monitorear consumo de datos por aplicación"""
+    """def monitor_app_data(self):
+        #Monitorear consumo de datos por aplicación
         while self.running:
             current_usage = self.get_app_data_usage()
         
@@ -2220,7 +2220,7 @@ class InternetMonitor:
             if random.random() < 0.1:
                 self.save_data_history()
         
-            time.sleep(self.config.get('check_interval', 5))
+            time.sleep(self.config.get('check_interval', 5))"""
     
     """def create_app_usage_page(self):
         #Crear pestaña de consumo por aplicación

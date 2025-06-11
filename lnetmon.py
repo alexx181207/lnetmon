@@ -20,6 +20,9 @@ import tempfile
 import multiprocessing
 import fcntl
 import random
+import socket
+import subprocess
+import re
 
 # Constantes de estilo
 PRIMARY_COLOR = "#1E88E5"
@@ -2166,10 +2169,59 @@ class InternetMonitor:
         if page_num == 2:  # Cambiar según la posición de la pestaña
             self.populate_monthly_model()
     
-
-    def get_app_data_usage(self):
-        """Obtener consumo de datos por proceso"""
+    """def get_app_data_usage(self):
+        #Obtener consumo de datos por aplicación usando conexiones activas
         usage = {}
+
+        # Obtener todas las conexiones activas en el sistema
+        connections = psutil.net_connections()
+
+        # Agrupar conexiones por proceso
+        for conn in connections:
+            if conn.status != 'ESTABLISHED':
+                continue
+        
+            try:
+                proc = psutil.Process(conn.pid) if conn.pid else None
+                name = proc.name() if proc else "Unknown"
+            except psutil.NoSuchProcess:
+                continue
+
+            # Solo considerar conexiones de red (TCP/UDP)
+            if conn.type not in [socket.SOCK_STREAM, socket.SOCK_DGRAM]:
+                continue
+
+            # Filtrar conexiones locales (localhost)
+            if conn.laddr.ip in ["127.0.0.1", "::1"]:
+                continue
+
+            # Inicializar si no existe
+            if name not in usage:
+                usage[name] = {"download": 0, "upload": 0, "total": 0}
+               
+            # Sumar bytes de la conexión (esto es un estimado)
+            # NOTA: psutil no proporciona bytes totales por conexión, solo direcciones
+            # Esta parte requiere monitoreo adicional (ver paso 2)
+            usage[name]["download"] += 0  # Placeholder
+            usage[name]["upload"] += 0
+            usage[name]["total"] += 0
+
+        return usage"""
+    
+    """def connection_valid(conn):
+        Verificar si la conexión es externa (no loopback)
+        if conn.laddr.ip in ["127.0.0.1", "::1"]:
+            return False
+        if conn.type not in [socket.SOCK_STREAM, socket.SOCK_DGRAM]:
+            return False
+        return True"""
+       
+    def get_app_data_usage(self):
+        #Obtener consumo de datos por proceso
+        usage = {}
+        
+        # Obtener todas las conexiones activas en el sistema
+        #connections = psutil.net_connections()
 
         for proc in psutil.process_iter(['pid', 'name', 'io_counters']):
             try:
@@ -2202,7 +2254,7 @@ class InternetMonitor:
         return usage
 
     def monitor_app_data(self):
-        """Monitorear consumo de datos por aplicación"""
+        #Monitorear consumo de datos por aplicación
         while self.running:
             current_usage = self.get_app_data_usage()
         
@@ -2221,6 +2273,13 @@ class InternetMonitor:
                 self.save_data_history()
         
             time.sleep(self.config.get('check_interval', 5))
+    
+    """def network_process(proc):
+        #Verificar si el proceso tiene conexiones de red activas
+        try:
+            return any(connection_valid(c) for c in proc.connections())
+        except psutil.AccessDenied:
+            return False"""
     
     """def create_app_usage_page(self):
         #Crear pestaña de consumo por aplicación
