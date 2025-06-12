@@ -68,11 +68,9 @@ EOF
 python3 -m pip install --target="$APPDIR/usr/lib/python3.11/site-packages" requests pystray pillow speedtest-cli psutil pygobject
 
 # Descargar appimagetool
-#wget -O $DIR/appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-#chmod +x build/appimagetool
+#wget -O /appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
 
-# Construir AppImage
-$DIR/appimagetool "$APPDIR" "$DIR/$APP-$VERSION.AppImage"
 
-rm -rf $DIR/Depends
-rm -rf $DIR/build
+$DIR/appimagetool "$APPDIR" "$HOME/$APP-$VERSION.AppImage"
+
+rm -rf $DIR/
