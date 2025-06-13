@@ -21,7 +21,7 @@ tar -xvf Depends.tar.xz -C $DIR
 # Copiar archivos
 cp -R $DIR/Depends/* "$APPDIR/"
 cp -R src/* "$APPDIR/usr/bin/lnetmon"
-cp $HOME/appimagetool $DIR
+#cp $HOME/appimagetool $DIR
 
 # Crear AppRun
 cat > "$APPDIR/AppRun" <<\EOF
@@ -54,7 +54,7 @@ exec "$HERE/usr/bin/lnetmon/main.py" "$@"
 EOF
 chmod +x "$APPDIR/AppRun"
 
-# Crear .desktop"$DIR"
+# Crear .desktop"
 cat > "$APPDIR/$APP.desktop" <<EOF
 [Desktop Entry]
 Name=LNetMon
@@ -68,9 +68,9 @@ EOF
 python3 -m pip install --target="$APPDIR/usr/lib/python3.11/site-packages" requests pystray pillow speedtest-cli psutil pygobject
 
 # Descargar appimagetool
-#wget -O /appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+wget -O $DIR/appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 
-
+chmod +x $DIR/appimagetool
 $DIR/appimagetool "$APPDIR" "$HOME/$APP-$VERSION.AppImage"
 
-rm -rf $DIR/
+#rm -rf $DIR/
