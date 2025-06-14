@@ -11,10 +11,6 @@ DIR="$HOME/LNetMon/"
 mkdir -p "$DIR/build"
 APPDIR="$DIR/build/$APP.AppDir"
 mkdir -p "$APPDIR/usr/bin/lnetmon"
-#mkdir -p "$APPDIR/lib"
-#mkdir -p "$APPDIR/usr/lib"
-#mkdir -p "$APPDIR/usr/lib/x86_64-linux-gnu"
-#mkdir -p "$APPDIR/lib/x86_64-linux-gnu"
 
 #descomprimir depends y copiarlo al build
 tar -xvf Depends.tar.xz -C $DIR
@@ -25,29 +21,26 @@ cp -R src/* "$APPDIR/usr/bin/lnetmon"
 
 # Crear AppRun
 cat > "$APPDIR/AppRun" <<\EOF
- #!/bin/bash
+#!/bin/bash
 
 # Configurar rutas para librerías y GI
 HERE="$(dirname "$(readlink -f "$0")")"
 
 # Obtener información de la distribución
 
-# Extraer ID_LIKE del archivo /etc/os-release
+ID=$(grep '^ID=' /etc/os-release | awk -F= '{print $2}' | tr -d '"')
 ID_LIKE=$(grep '^ID_LIKE=' /etc/os-release 2>/dev/null | awk -F= '{print $2}' | tr -d '"')
 
-# Si ID_LIKE no existe, usar ID como fallback
-if [[ -z "$ID_LIKE" ]]; then
-    ID_LIKE=$(grep '^ID=' /etc/os-release | awk -F= '{print $2}' | tr -d '"')
-fi
-
-
 # Verificar si es derivada de Ubuntu
-if echo "$ID_LIKE" | grep -qi ubuntu; then
+if [[ "$ID" == "ubuntu" ]];then
     export LD_LIBRARY_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
     export PYTHONPATH="$HERE/usr/lib/ubuntu/python3/dist-packages:$PYTHONPATH"
     export GI_TYPELIB_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu/girepository-1.0:${GI_TYPELIB_PATH}"
-
-elif echo "$ID_LIKE" | grep -qi debian; then
+elif [[ "$ID_LIKE" =~ "ubuntu" ]];then
+    export LD_LIBRARY_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+    export PYTHONPATH="$HERE/usr/lib/ubuntu/python3/dist-packages:$PYTHONPATH"
+    export GI_TYPELIB_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu/girepository-1.0:${GI_TYPELIB_PATH}"
+elif [[ "$ID_LIKE" =~ "debian" ]]; then
     export PYTHONPATH="$HERE/usr/lib/python3/dist-packages:$PYTHONPATH"
     export LD_LIBRARY_PATH="$HERE/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
     export GI_TYPELIB_PATH="$HERE/lib/girepository-1.0:${GI_TYPELIB_PATH}"
@@ -59,6 +52,7 @@ else
 fi
 
 exec "$HERE/usr/bin/lnetmon/main.py" "$@"
+
 EOF
 chmod +x "$APPDIR/AppRun"
 
@@ -79,6 +73,7 @@ python3 -m pip install --target="$APPDIR/usr/lib/python3.11/site-packages" reque
 wget -O $DIR/appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 
 chmod +x $DIR/appimagetool
+
 $DIR/appimagetool "$APPDIR" "$HOME/$APP-$VERSION.AppImage"
 
 rm -rf $DIR/
