@@ -25,29 +25,37 @@ cp -R src/* "$APPDIR/usr/bin/lnetmon"
 
 # Crear AppRun
 cat > "$APPDIR/AppRun" <<\EOF
-#!/bin/sh
+ #!/bin/bash
 
 # Configurar rutas para librerías y GI
 HERE="$(dirname "$(readlink -f "$0")")"
 
+# Obtener información de la distribución
 
-if command -v apt &>/dev/null; then
+# Extraer ID_LIKE del archivo /etc/os-release
+ID_LIKE=$(grep '^ID_LIKE=' /etc/os-release 2>/dev/null | awk -F= '{print $2}' | tr -d '"')
+
+# Si ID_LIKE no existe, usar ID como fallback
+if [[ -z "$ID_LIKE" ]]; then
+    ID_LIKE=$(grep '^ID=' /etc/os-release | awk -F= '{print $2}' | tr -d '"')
+fi
+
+
+# Verificar si es derivada de Ubuntu
+if echo "$ID_LIKE" | grep -qi ubuntu; then
+    export LD_LIBRARY_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+    export PYTHONPATH="$HERE/usr/lib/ubuntu/python3/dist-packages:$PYTHONPATH"
+    export GI_TYPELIB_PATH="$HERE/usr/lib/ubuntu/x86_64-linux-gnu/girepository-1.0:${GI_TYPELIB_PATH}"
+
+elif echo "$ID_LIKE" | grep -qi debian; then
     export PYTHONPATH="$HERE/usr/lib/python3/dist-packages:$PYTHONPATH"
-    #export PYTHONPATH="$HERE/usr/bin/lnetmon:$PYTHONPATH"
-    #export PYTHONPATH="$HERE/usr/lib/python3.11/site-packages:$PYTHONPATH"
-    #export LD_LIBRARY_PATH="$HERE/lib:${LD_LIBRARY_PATH}"
     export LD_LIBRARY_PATH="$HERE/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
-    #export LD_LIBRARY_PATH="$HERE/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
-    #export LD_LIBRARY_PATH="$HERE/usr/lib/python3/dist-packages:${LD_LIBRARY_PATH}"
     export GI_TYPELIB_PATH="$HERE/lib/girepository-1.0:${GI_TYPELIB_PATH}"
 else
-   export LD_LIBRARY_PATH="$HERE/usr/lib:${LD_LIBRARY_PATH}"
-   export LD_LIBRARY_PATH="$HERE/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
-   #export LD_LIBRARY_PATH="$HERE/usr/lib/python3/dist-packages:${LD_LIBRARY_PATH}"
-   #export LD_LIBRARY_PATH="$HERE/lib/python3/dist-packages:${LD_LIBRARY_PATH}"
-   export GI_TYPELIB_PATH="$HERE/usr/lib/girepository-1.0:${GI_TYPELIB_PATH}"
-   export PYTHONPATH="$HERE/usr/lib/python3.11/site-packages:$PYTHONPATH"
-    
+    export LD_LIBRARY_PATH="$HERE/usr/lib:${LD_LIBRARY_PATH}"
+    export LD_LIBRARY_PATH="$HERE/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+    export GI_TYPELIB_PATH="$HERE/usr/lib/girepository-1.0:${GI_TYPELIB_PATH}"
+    export PYTHONPATH="$HERE/usr/lib/python3.11/site-packages:$PYTHONPATH"
 fi
 
 exec "$HERE/usr/bin/lnetmon/main.py" "$@"
@@ -73,4 +81,4 @@ wget -O $DIR/appimagetool https://github.com/AppImage/AppImageKit/releases/downl
 chmod +x $DIR/appimagetool
 $DIR/appimagetool "$APPDIR" "$HOME/$APP-$VERSION.AppImage"
 
-#rm -rf $DIR/
+rm -rf $DIR/
