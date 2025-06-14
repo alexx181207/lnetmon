@@ -3,7 +3,7 @@ set -e
 
 # Crear entorno de construcción
 APP="LNetMon"
-VERSION="0.1.1"
+VERSION="0.1.2"
 
 #Crear directorio en el home del usuario si este no existe
 [ ! -d "$HOME/LNetMon" ] && mkdir -p "$HOME/LNetMon"
